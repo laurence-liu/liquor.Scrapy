@@ -11,4 +11,11 @@ import scrapy
 class LiquorItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
+    name = scrapy.Field()
+    link = scrapy.Field()
+    image = scrapy.Field()
+    introduce = scrapy.Field()
+    material = scrapy.Field()
+    steps = scrapy.Field()
+    basespirit = scrapy.Field()
     pass

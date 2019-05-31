@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import scrapy
+from ..items import LiquorItem
 
 class RecipesCrawlerSpider(scrapy.Spider):
     name = 'recipes_crawler'
@@ -19,9 +20,9 @@ class RecipesCrawlerSpider(scrapy.Spider):
         cocktails = soup.find("div", class_="container-grid")
 
         for cocktail in cocktails:
-            name = cocktail.find("h3", class_="archive-item-headline sans").find("a").get_text()
+            # name = cocktail.find("h3", class_="archive-item-headline sans").find("a").get_text()
             link = cocktail.find("h3", class_="archive-item-headline sans").find("a").get("href")
-            image = 'http://' + cocktail.find("div", class_="item image").get("data-href")[2:]
+            # image = 'http://' + cocktail.find("div", class_="item image").get("data-href")[2:]
             
             yield response.follow(link, self.parse_cocktails)
 
@@ -36,7 +37,7 @@ class RecipesCrawlerSpider(scrapy.Spider):
 
         name = soup.find("div", class_="row head-row text-center").find("h1").get_text()
         link = response.request.url
-        image = soup.find("div", class_="center-block img-hero heart-me").find("img").get("data-pin-media")
+        image = 'http://' + soup.find("div", class_="center-block img-hero heart-me").find("img").get("src")[2:]
 
         try:
             introduce = soup.find(itemprop="description").get_text()
@@ -62,16 +63,10 @@ class RecipesCrawlerSpider(scrapy.Spider):
             steps = "No Information Available."
 
         try:
-            baseSpirit = soup.find("div", class_="col-xs-7 x-recipe-spirit").get_text()
+            basespirit = soup.find("div", class_="col-xs-7 x-recipe-spirit").get_text()
         except AttributeError:
-            baseSpirit = "None"
+            basespirit = "None"
+
+        liquorItem = LiquorItem(name = name, link=link, image=image, introduce=introduce, material=material, steps=steps, basespirit=basespirit)
         
-        yield {
-            'name': name, 
-            'link': link, 
-            'image': image,
-            'introduce': introduce,
-            'material': material,
-            'steps': steps,
-            'baseSpirit': baseSpirit, 
-        }
+        yield liquorItem
