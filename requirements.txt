@@ -1,2 +1,3 @@
 Scrapy>=1.6
 beautifulsoup4
+psycopg2
