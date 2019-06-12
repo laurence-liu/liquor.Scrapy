@@ -16,7 +16,7 @@ class LiquorPipeline(object):
         # database = 'dear-liquor'
         # self.connection = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)
         DATABASE_URL = os.environ['DATABASE_URL']
-        connection = psycopg2.connect(DATABASE_URL, sslmode='require')
+        self.connection = psycopg2.connect(DATABASE_URL, sslmode='require')
         self.cur = self.connection.cursor()
 
     def close_spider(self, spider):
